@@ -237,6 +237,82 @@
             font-style: italic;
             text-align: center;
         }
+        /* =========================================
+           📱 모바일 반응형 UI (컴팩트 모드) 
+           ========================================= */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 25px;
+            }
+
+            .draft-btn {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+                margin-bottom: 30px;
+            }
+
+            .team-container {
+                flex-direction: column; /* 카드를 가로 한줄에서 세로 한줄로 변경 */
+                align-items: center;
+                overflow-x: hidden; /* 가로 스크롤 없애기 */
+                gap: 15px; /* 카드 사이 간격 줄이기 */
+                padding-bottom: 0;
+            }
+
+            .card {
+                width: 90%; /* 화면 꽉 차게 비율로 조정 */
+                max-width: 320px;
+                padding: 15px 20px; /* 카드 안쪽 여백 줄여서 컴팩트하게 */
+                flex: none;
+                min-height: auto; 
+            }
+
+            .role-badge {
+                margin-bottom: 10px;
+                padding: 4px 10px;
+                font-size: 0.8rem;
+            }
+
+            .rider-name {
+                font-size: 1.3rem; /* 이름 글씨 크기 축소 */
+                min-height: auto;
+            }
+
+            .achievement-text {
+                margin-bottom: 5px;
+                font-size: 0.8rem;
+            }
+
+            .bike-text {
+                margin-bottom: 10px;
+            }
+
+            /* 모바일용 점수판 축소 */
+            .power-container {
+                margin-top: 25px;
+                padding: 15px 20px;
+                width: 90%;
+                max-width: 320px;
+            }
+
+            .power-score {
+                font-size: 2.5rem;
+            }
+
+            .team-tier-stars {
+                font-size: 1.5rem;
+                margin-top: 10px;
+            }
+
+            .team-tier-text {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
