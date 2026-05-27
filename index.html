@@ -173,6 +173,15 @@
             font-size: 3rem;
             font-weight: 900;
         }
+        .achievement-text {
+            font-size: 0.85rem;
+            color: #38bdf8; /* 눈에 띄는 스카이블루 색상 */
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.4;
+            word-break: keep-all; /* 단어 단위로 줄바꿈되도록 설정 */
+            min-height: 2.4rem; /* 텍스트가 짧아도 카드 높이가 유지되도록 고정 */
+        }
     </style>
 </head>
 <body>
@@ -183,6 +192,7 @@
             <div class="role-badge role-gc">GC LEADER</div>
             <div class="season-badge" id="gc-season"></div>
             <h2 class="rider-name" id="gc-name"></h2>
+            <div class="achievement-text" id="gc-achieve"></div>
             <div class="team-name" id="gc-team"></div>
             <div class="stats">
                 <div class="stat-row"><span class="stat-label">GC</span><span class="stat-value" id="gc-stat-gc"></span></div>
@@ -194,7 +204,8 @@
         <div class="card empty-state revealed" id="slot-dom">
             <div class="role-badge role-domestique">DOMESTIQUE</div>
             <div class="season-badge" id="dom-season"></div>
-            <h2 class="rider-name" id="dom-name"></h2>
+            <h2 class="rider-name" id="dom-name"></h2>            
+            <div class="achievement-text" id="dom-achieve"></div>
             <div class="team-name" id="dom-team"></div>
             <div class="stats">
                 <div class="stat-row"><span class="stat-label">GC</span><span class="stat-value" id="dom-stat-gc"></span></div>
@@ -207,6 +218,7 @@
             <div class="role-badge role-sprinter">SPRINTER</div>
             <div class="season-badge" id="spr-season"></div>
             <h2 class="rider-name" id="spr-name"></h2>
+            <div class="achievement-text" id="spr-achieve">
             <div class="team-name" id="spr-team"></div>
             <div class="stats">
                 <div class="stat-row"><span class="stat-label">GC</span><span class="stat-value" id="spr-stat-gc"></span></div>
@@ -219,106 +231,222 @@
     <script>
         // 여기에 앞서 제공해드린 200명 배열 데이터를 통째로 넣어주시면 됩니다.
         // (현재는 테스트를 위해 일부만 포함되어 있습니다)
-        const riders = [
-          { name: "Tadej Pogačar", team: "UAE Team Emirates", primeSeason: 2021, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
-  { name: "Tadej Pogačar", team: "UAE Team Emirates", primeSeason: 2024, gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★★★★☆" }, // 지로-투르 더블 달성, 압도적 폼
-  { name: "Jonas Vingegaard", team: "Jumbo-Visma", primeSeason: 2022, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
-  { name: "Jonas Vingegaard", team: "Jumbo-Visma", primeSeason: 2023, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" }, // 역대급 TT 퍼포먼스
-  
-  { name: "Eddy Merckx", team: "Faema", primeSeason: 1969, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★★" }, // 투르 첫 출전 전관왕
-  { name: "Eddy Merckx", team: "Molteni", primeSeason: 1974, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" },
-  { name: "Bernard Hinault", team: "Renault-Gitane", primeSeason: 1979, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" },
-  { name: "Bernard Hinault", team: "La Vie Claire", primeSeason: 1985, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★☆☆" },
-  { name: "Miguel Indurain", team: "Banesto", primeSeason: 1992, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  { name: "Miguel Indurain", team: "Banesto", primeSeason: 1995, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  
-  { name: "Chris Froome", team: "Sky Procycling", primeSeason: 2013, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
-  { name: "Chris Froome", team: "Team Sky", primeSeason: 2015, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
-  { name: "Chris Froome", team: "Team Sky", primeSeason: 2017, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
-  { name: "Jacques Anquetil", team: "Saint-Raphael", primeSeason: 1964, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
-  { name: "Alberto Contador", team: "Discovery Channel", primeSeason: 2007, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  { name: "Alberto Contador", team: "Astana", primeSeason: 2009, gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★★☆☆☆" },
-  
-  // --- 전설적인 GC 및 그랜드 투어 위너 ---
-  { name: "Vincenzo Nibali", team: "Astana", primeSeason: 2014, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
-  { name: "Greg LeMond", team: "AD Renting", primeSeason: 1989, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" }, // 8초 차이 우승
-  { name: "Marco Pantani", team: "Mercatone Uno", primeSeason: 1998, gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★☆☆☆☆" },
-  { name: "Jan Ullrich", team: "Team Telekom", primeSeason: 1997, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  { name: "Primoz Roglic", team: "Jumbo-Visma", primeSeason: 2020, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★★☆" },
-  { name: "Remco Evenepoel", team: "Soudal Quick-Step", primeSeason: 2024, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
-  { name: "Egan Bernal", team: "Team INEOS", primeSeason: 2019, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
-  { name: "Cadel Evans", team: "BMC Racing Team", primeSeason: 2011, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
-  { name: "Bradley Wiggins", team: "Team Sky", primeSeason: 2012, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
-  { name: "Geraint Thomas", team: "Team Sky", primeSeason: 2018, gc: "★★★★★", domestique: "★★★★☆", sprint: "★★☆☆☆" },
-  { name: "Nairo Quintana", team: "Movistar Team", primeSeason: 2013, gc: "★★★★☆", domestique: "★☆☆☆☆", sprint: "★☆☆☆☆" },
-  
-  // --- 스프린트 제왕들 (팀/연도별 폼 변화) ---
-  { name: "Mark Cavendish", team: "Team Columbia-HTC", primeSeason: 2009, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 6개 스테이지 우승
-  { name: "Mark Cavendish", team: "HTC-Highroad", primeSeason: 2011, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 그린 저지
-  { name: "Mark Cavendish", team: "Deceuninck-Quick-Step", primeSeason: 2021, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 화려한 부활, 4승 추가
-  { name: "Mark Cavendish", team: "Astana Qazaqstan", primeSeason: 2024, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★☆" }, // 35승 대기록 달성
-  { name: "Peter Sagan", team: "Liquigas-Cannondale", primeSeason: 2012, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
-  { name: "Peter Sagan", team: "Tinkoff", primeSeason: 2016, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
-  { name: "Peter Sagan", team: "Bora-Hansgrohe", primeSeason: 2018, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
-  { name: "Erik Zabel", team: "Team Telekom", primeSeason: 1997, gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
-  { name: "Erik Zabel", team: "Team Telekom", primeSeason: 2001, gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
-  { name: "Mario Cipollini", team: "Saeco", primeSeason: 1999, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Marcel Kittel", team: "Team Giant-Shimano", primeSeason: 2014, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Marcel Kittel", team: "Quick-Step Floors", primeSeason: 2017, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 5개 스테이지 우승
-  
-  // --- 강력한 최신형 괴물들 ---
-  { name: "Wout van Aert", team: "Jumbo-Visma", primeSeason: 2020, gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★★☆" },
-  { name: "Wout van Aert", team: "Jumbo-Visma", primeSeason: 2022, gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★★★" }, // 궁극의 그린저지 & 슈퍼 도메스티크
-  { name: "Mathieu van der Poel", team: "Alpecin-Fenix", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★★" }, // 첫 출전 옐로저지
-  { name: "Jasper Philipsen", team: "Alpecin-Deceuninck", primeSeason: 2023, gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" }, // 4승 및 그린저지
-  { name: "Mads Pedersen", team: "Trek-Segafredo", primeSeason: 2022, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
-  { name: "Biniam Girmay", team: "Intermarche-Wanty", primeSeason: 2024, gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" }, // 아프리카 최초 그린저지
-  
-  // --- 슈퍼 도메스티크 & 언성 히어로들 ---
-  { name: "Sepp Kuss", team: "Jumbo-Visma", primeSeason: 2020, gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 로글리치의 핵심 산악 엔진
-  { name: "Sepp Kuss", team: "Jumbo-Visma", primeSeason: 2023, gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 빙에고르 우승의 일등공신
-  { name: "Michal Kwiatkowski", team: "Team Sky", primeSeason: 2017, gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★☆☆" }, // 프룸을 위한 만능 헬퍼
-  { name: "Michal Kwiatkowski", team: "INEOS Grenadiers", primeSeason: 2020, gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
-  { name: "Jonathan Castroviejo", team: "Team Sky", primeSeason: 2018, gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
-  { name: "Jens Voigt", team: "Team CSC", primeSeason: 2006, gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★★☆☆☆" }, // 브레이크어웨이와 희생의 아이콘
-  { name: "Michael Morkov", team: "Deceuninck-Quick-Step", primeSeason: 2021, gc: "★☆☆☆☆", domestique: "★★★★★", sprint: "★★★☆☆" }, // 카벤디시 부활을 이끈 역대급 리드아웃
-  { name: "Tim Declercq", team: "Deceuninck-Quick-Step", primeSeason: 2020, gc: "★☆☆☆☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 펠로톤의 트랙터
-  { name: "Tony Martin", team: "Jumbo-Visma", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★★☆☆☆" }, // 펠로톤 지휘관
-  
-  // --- 스테이지 헌터 및 펀쳐 ---
-  { name: "Julian Alaphilippe", team: "Deceuninck-Quick-Step", primeSeason: 2019, gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★★★☆" }, // 프랑스의 희망, 14일간 마이요 존느
-  { name: "Tom Pidcock", team: "INEOS Grenadiers", primeSeason: 2022, gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" }, // 알프 뒤에즈 스테이지 우승
-  { name: "Matej Mohoric", team: "Bahrain Victorious", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
-  { name: "Thomas Voeckler", team: "Europcar", primeSeason: 2011, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" }, // 기적의 방어전
-  
-  // --- 강력한 2옵션 및 팀 플레이어 ---
-  { name: "Richie Porte", team: "Team Sky", primeSeason: 2015, gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 프룸의 최고 산악 파트너
-  { name: "Richie Porte", team: "Trek-Segafredo", primeSeason: 2020, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" }, // 본인 종합 3위 포디움 달성
-  { name: "Matteo Jorgenson", team: "Visma-Lease a Bike", primeSeason: 2024, gc: "★★★★☆", domestique: "★★★★★", sprint: "★★☆☆☆" },
-  { name: "Adam Yates", team: "UAE Team Emirates", primeSeason: 2023, gc: "★★★★★", domestique: "★★★★☆", sprint: "★★★☆☆" }, // 포가차르 헬퍼 겸 종합 3위
-  { name: "Joao Almeida", team: "UAE Team Emirates", primeSeason: 2024, gc: "★★★★☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
-  
-  // --- 과거 명스프린터들 ---
-  { name: "Andre Greipel", team: "Lotto-Belisol", primeSeason: 2012, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Andre Greipel", team: "Lotto-Soudal", primeSeason: 2015, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Alessandro Petacchi", team: "Fassa Bortolo", primeSeason: 2003, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Robbie McEwen", team: "Lotto-Domo", primeSeason: 2004, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Thor Hushovd", team: "Credit Agricole", primeSeason: 2005, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
-  
-  // --- 근래 주요 선수들 (계속 추가 가능) ---
-  { name: "Richard Carapaz", team: "EF Education-EasyPost", primeSeason: 2024, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" }, // 산악왕 (폴카닷 저지)
-  { name: "Jai Hindley", team: "BORA-hansgrohe", primeSeason: 2023, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  { name: "Simon Yates", team: "Team Jayco AlUla", primeSeason: 2023, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
-  { name: "David Gaudu", team: "Groupama-FDJ", primeSeason: 2022, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  { name: "Romain Bardet", team: "AG2R La Mondiale", primeSeason: 2016, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  { name: "Thibaut Pinot", team: "Groupama-FDJ", primeSeason: 2019, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-  { name: "Dylan Groenewegen", team: "Team Jumbo-Visma", primeSeason: 2019, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Fabio Jakobsen", team: "Quick-Step Alpha Vinyl", primeSeason: 2022, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Caleb Ewan", team: "Lotto Soudal", primeSeason: 2019, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-  { name: "Michael Matthews", team: "Team Sunweb", primeSeason: 2017, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" }, // 그린 저지 획득
-  { name: "Christophe Laporte", team: "Jumbo-Visma", primeSeason: 2022, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★☆" }, // 슈퍼 리드아웃 & 스테이지 우승
-  { name: "Stefan Kung", team: "Groupama-FDJ", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" }, // 강력한 TT 특화 룰러
-  { name: "Filippo Ganna", team: "INEOS Grenadiers", primeSeason: 2022, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" }
+       const riders = [
+          // --- 👑 절대자 & 역대급 GC (그랜드 투어 위너) ---
+          { name: "Tadej Pogačar", team: "UAE Team Emirates", primeSeason: 2024, achievement: "지로-투르 더블, 투르 스테이지 6승 압도적 옐로저지", bike: "Colnago V4Rs", gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★★★★☆" },
+          { name: "Tadej Pogačar", team: "UAE Team Emirates", primeSeason: 2021, achievement: "투르 2연패, 3개 부문 저지(옐로/폴카닷/화이트) 싹쓸이", bike: "Colnago V3Rs", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Jonas Vingegaard", team: "Jumbo-Visma", primeSeason: 2023, achievement: "투르 2연패, 코망블 TT 역대급 퍼포먼스", bike: "Cervélo R5", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Jonas Vingegaard", team: "Jumbo-Visma", primeSeason: 2022, achievement: "포가차르를 꺾고 첫 마이요 존느 획득", bike: "Cervélo R5", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Eddy Merckx", team: "Faema", primeSeason: 1969, achievement: "투르 첫 출전 전관왕(종합/산악/포인트)", bike: "Eddy Merckx (De Rosa)", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★★" },
+          { name: "Eddy Merckx", team: "Molteni", primeSeason: 1974, achievement: "투르 드 프랑스 통산 5승 달성", bike: "Eddy Merckx", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Bernard Hinault", team: "Renault-Elf", primeSeason: 1981, achievement: "마이요 존느의 지배자, 통산 5회 우승", bike: "Gitane Profil", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Miguel Indurain", team: "Banesto", primeSeason: 1995, achievement: "전무후무한 투르 드 프랑스 5연패 달성", bike: "Pinarello Espada", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Chris Froome", team: "Team Sky", primeSeason: 2013, achievement: "스카이 트레인의 완성, 첫 투르 종합 우승", bike: "Pinarello Dogma 65.1", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Chris Froome", team: "Team Sky", primeSeason: 2015, achievement: "산악 구간 압살, 투르 종합 및 산악왕 동시 석권", bike: "Pinarello Dogma F8", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Jacques Anquetil", team: "Saint-Raphael", primeSeason: 1964, achievement: "투르 최초 5회 우승, 위대한 타임트라이얼리스트", bike: "Gitane", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Greg LeMond", team: "AD Renting", primeSeason: 1989, achievement: "역대 최소 격차(8초) 우승, 에어로바의 혁명", bike: "Bottecchia", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Marco Pantani", team: "Mercatone Uno", primeSeason: 1998, achievement: "해적, 마지막 지로-투르 더블 달성자", bike: "Bianchi Mega Pro XL", gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Vincenzo Nibali", team: "Astana", primeSeason: 2014, achievement: "코블스톤을 지배하며 옐로저지 압도적 우승", bike: "Specialized Tarmac SL4", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Alberto Contador", team: "Discovery Channel", primeSeason: 2007, achievement: "엘 피스톨레로, 투르 드 프랑스 첫 종합 우승", bike: "Trek Madone", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Andy Schleck", team: "Team Saxo Bank", primeSeason: 2010, achievement: "치열한 라이벌전 끝에 종합 우승(사후 판결)", bike: "Specialized Tarmac SL3", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Primoz Roglic", team: "Jumbo-Visma", primeSeason: 2020, achievement: "팀 윰보-비스마의 황금기를 연 캡틴", bike: "Bianchi Oltre XR4", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Egan Bernal", team: "Team INEOS", primeSeason: 2019, achievement: "콜롬비아 최초이자 최연소 투르 종합 우승", bike: "Pinarello Dogma F12", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Geraint Thomas", team: "Team Sky", primeSeason: 2018, achievement: "헌신적인 헬퍼에서 에이스로, 무결점 투르 우승", bike: "Pinarello Dogma F10", gc: "★★★★★", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Bradley Wiggins", team: "Team Sky", primeSeason: 2012, achievement: "영국인 최초 투르 우승, 타임트라이얼의 정점", bike: "Pinarello Dogma 65.1", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Remco Evenepoel", team: "Soudal Quick-Step", primeSeason: 2024, achievement: "투르 데뷔전 종합 3위 및 영라이더 저지", bike: "Specialized Tarmac SL8", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Nairo Quintana", team: "Movistar Team", primeSeason: 2013, achievement: "순수 클라이머의 정점, 투르 종합 2위 및 산악왕", bike: "Pinarello Dogma 65.1", gc: "★★★★☆", domestique: "★☆☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Cadel Evans", team: "BMC Racing Team", primeSeason: 2011, achievement: "불굴의 의지, 호주 최초의 투르 우승", bike: "BMC Teammachine SLR01", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Jan Ullrich", team: "Team Telekom", primeSeason: 1997, achievement: "압도적인 파워로 투르 드 프랑스 제패", bike: "Pinarello Paris", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Carlos Sastre", team: "Team CSC", primeSeason: 2008, achievement: "알프 뒤에즈에서의 전설적인 독주 우승", bike: "Cervélo R3-SL", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Joao Almeida", team: "UAE Team Emirates", primeSeason: 2024, achievement: "포가차르를 돕는 최고의 2옵션 및 종합 4위", bike: "Colnago V4Rs", gc: "★★★★☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Adam Yates", team: "UAE Team Emirates", primeSeason: 2023, achievement: "스테이지 1 우승 및 투르 종합 3위 포디움", bike: "Colnago V4Rs", gc: "★★★★★", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Richard Carapaz", team: "EF Education-EasyPost", primeSeason: 2024, achievement: "마이요 존느 착용 및 최종 산악왕 폴카닷 저지", bike: "Cannondale SuperSix EVO", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Simon Yates", team: "Team Jayco AlUla", primeSeason: 2023, achievement: "폭발적인 어택, 투르 종합 4위 달성", bike: "Giant TCR Advanced SL", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Jai Hindley", team: "BORA-hansgrohe", primeSeason: 2023, achievement: "투르 데뷔 첫 주 마이요 존느 획득", bike: "Specialized Tarmac SL7", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+        
+          // --- ⚡ 전설의 스프린터 & 올라운더 ---
+          { name: "Mark Cavendish", team: "Team Columbia-HTC", primeSeason: 2009, achievement: "최강의 미사일, 단일 투르 스테이지 6승", bike: "Scott Addict", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Mark Cavendish", team: "Deceuninck-Quick-Step", primeSeason: 2021, achievement: "기적의 부활, 스테이지 4승 및 통산 34승 타이", bike: "Specialized Tarmac SL7", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Mark Cavendish", team: "Astana Qazaqstan", primeSeason: 2024, achievement: "사이클 역사상 전무후무한 투르 통산 35승 대기록", bike: "Wilier Filante SLR", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★☆" },
+          { name: "Wout van Aert", team: "Jumbo-Visma", primeSeason: 2022, achievement: "궁극의 슈퍼 도메스티크 & 역대급 포인트 그린 저지", bike: "Cervélo S5", gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★★★" },
+          { name: "Peter Sagan", team: "Tinkoff", primeSeason: 2016, achievement: "그린 저지 5연패, 펠로톤 최고의 엔터테이너", bike: "Specialized Venge ViAS", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+          { name: "Peter Sagan", team: "Bora-Hansgrohe", primeSeason: 2018, achievement: "통산 6번째 그린 저지와 압도적인 파워", bike: "Specialized S-Works Venge", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+          { name: "Mario Cipollini", team: "Saeco", primeSeason: 1999, achievement: "초고속 평지 트레인의 완성자, 사자왕", bike: "Cannondale CAAD4", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Erik Zabel", team: "Team Telekom", primeSeason: 2001, achievement: "투르 드 프랑스 그린 저지 6회 연속 수상", bike: "Pinarello Prince", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Mathieu van der Poel", team: "Alpecin-Fenix", primeSeason: 2021, achievement: "투르 데뷔전 옐로 저지 획득, 할아버지의 영광", bike: "Canyon Aeroad CFR", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★★" },
+          { name: "Jasper Philipsen", team: "Alpecin-Deceuninck", primeSeason: 2023, achievement: "재스퍼 더 디재스터, 스테이지 4승 및 그린 저지", bike: "Canyon Aeroad CFR", gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Marcel Kittel", team: "Quick-Step Floors", primeSeason: 2017, achievement: "초월적인 파워로 스테이지 5승 싹쓸이", bike: "Specialized Venge ViAS", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Mads Pedersen", team: "Trek-Segafredo", primeSeason: 2022, achievement: "코블과 평지를 오가는 괴물, 첫 투르 스테이지 우승", bike: "Trek Madone SLR", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+          { name: "Biniam Girmay", team: "Intermarche-Wanty", primeSeason: 2024, achievement: "아프리카 흑인 선수 최초 스테이지 3승 및 그린저지", bike: "Cube Litening AERO C:68X", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Dylan Groenewegen", team: "Team Jumbo-Visma", primeSeason: 2019, achievement: "가장 빠른 사나이, 샹젤리제 포함 스테이지 다승", bike: "Bianchi Oltre XR4", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Caleb Ewan", team: "Lotto Soudal", primeSeason: 2019, achievement: "포켓 로켓, 극단적인 에어로 자세로 스테이지 3승", bike: "Ridley Noah Fast", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Tom Boonen", team: "Quick Step-Innergetic", primeSeason: 2007, achievement: "투르 2승 및 그린 저지 획득, 클래식의 제왕", bike: "Specialized Tarmac SL2", gc: "★☆☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+          { name: "Fabian Cancellara", team: "Team CSC", primeSeason: 2007, achievement: "프롤로그 우승 및 옐로저지 입고 평지 솔로잉 우승", bike: "Cervélo P3C", gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★★★☆☆" },
+          { name: "Thor Hushovd", team: "Credit Agricole", primeSeason: 2005, achievement: "노르웨이의 바이킹, 투르 그린 저지 획득", bike: "Look 585", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+          { name: "Andre Greipel", team: "Lotto-Soudal", primeSeason: 2015, achievement: "고릴라의 포효, 단일 투르 4개 스테이지 우승", bike: "Ridley Noah SL", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Michael Matthews", team: "Team Sunweb", primeSeason: 2017, achievement: "블링(Bling), 투르 그린 저지 획득 및 스테이지 2승", bike: "Giant TCR Advanced SL", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+        
+          // --- 🛡️ 슈퍼 도메스티크 & 리드아웃 멘 ---
+          { name: "Sepp Kuss", team: "Jumbo-Visma", primeSeason: 2023, achievement: "빙에고르 2연패를 이끈 펠로톤 최고의 산악 엔진", bike: "Cervélo R5", gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
+          { name: "Michal Kwiatkowski", team: "Team Sky", primeSeason: 2017, achievement: "프룸을 완벽하게 보위한 만능 슈퍼 도메스티크", bike: "Pinarello Dogma F10", gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★☆☆" },
+          { name: "Tony Martin", team: "Jumbo-Visma", primeSeason: 2021, achievement: "펠로톤을 지휘하는 거대한 트랙터, 디젤 엔진", bike: "Cervélo S5", gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★★☆☆☆" },
+          { name: "Tim Declercq", team: "Deceuninck-Quick-Step", primeSeason: 2020, achievement: "하루 종일 바람을 가르는 '엘 트랙터'", bike: "Specialized Tarmac SL7", gc: "★☆☆☆☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
+          { name: "Michael Morkov", team: "Deceuninck-Quick-Step", primeSeason: 2021, achievement: "카벤디시 부활을 이끈 역대 최고의 리드아웃 맨", bike: "Specialized Tarmac SL7", gc: "★☆☆☆☆", domestique: "★★★★★", sprint: "★★★☆☆" },
+          { name: "Jens Voigt", team: "Team CSC", primeSeason: 2006, achievement: "펠로톤의 낭만, 무한 어택과 희생의 브레이크어웨이", bike: "Cervélo Soloist", gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★★☆☆☆" },
+          { name: "Luke Rowe", team: "Team Sky", primeSeason: 2018, achievement: "스카이 트레인의 평지 구간을 책임진 불도저", bike: "Pinarello Dogma F10", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Matteo Jorgenson", team: "Visma-Lease a Bike", primeSeason: 2024, achievement: "부상당한 팀을 멱살 잡고 끈 차세대 슈퍼 헬퍼", bike: "Cervélo R5", gc: "★★★★☆", domestique: "★★★★★", sprint: "★★☆☆☆" },
+          { name: "Jonathan Castroviejo", team: "INEOS Grenadiers", primeSeason: 2020, achievement: "무결점 산악 페이스메이커, TT 스페셜리스트", bike: "Pinarello Dogma F12", gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
+          { name: "Filippo Ganna", team: "INEOS Grenadiers", primeSeason: 2022, achievement: "와트 몬스터, 평지에서 팀을 견인하는 최고의 엔진", bike: "Pinarello Dogma F", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Richie Porte", team: "Team Sky", primeSeason: 2015, achievement: "프룸의 우승을 도운 최고의 산악 파트너", bike: "Pinarello Dogma F8", gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
+          { name: "Wout Poels", team: "Team Sky", primeSeason: 2015, achievement: "알프스에서 프룸을 견인한 핵심 산악 헬퍼", bike: "Pinarello Dogma F8", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Rafal Majka", team: "Tinkoff-Saxo", primeSeason: 2014, achievement: "콘타도르의 공백을 메운 산악왕 폴카닷 저지", bike: "Specialized Tarmac SL4", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Tiesj Benoot", team: "Jumbo-Visma", primeSeason: 2022, achievement: "헌신적인 코블/평지/산악 만능 조력자", bike: "Cervélo S5", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Christophe Laporte", team: "Jumbo-Visma", primeSeason: 2022, achievement: "만능 리드아웃 및 기적의 스테이지 19 우승", bike: "Cervélo S5", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★☆" },
+        
+          // --- ⚔️ 스테이지 헌터, 펀처, 클래식 스페셜리스트 ---
+          { name: "Julian Alaphilippe", team: "Deceuninck-Quick-Step", primeSeason: 2019, achievement: "프랑스의 자존심, 14일간 옐로 저지 방어", bike: "Specialized Tarmac SL6", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Thomas Voeckler", team: "Europcar", primeSeason: 2011, achievement: "투르를 열광시킨 옐로 저지 마법", bike: "Colnago C59", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Tom Pidcock", team: "INEOS Grenadiers", primeSeason: 2022, achievement: "알프 뒤에즈 스테이지 우승, 천재적인 다운힐", bike: "Pinarello Dogma F", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Matej Mohoric", team: "Bahrain Victorious", primeSeason: 2021, achievement: "브레이크어웨이 스페셜리스트, 투르 스테이지 2승", bike: "Merida Scultura", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Stefan Kung", team: "Groupama-FDJ", primeSeason: 2021, achievement: "강력한 타임트라이얼 특화 룰러, 평지 엔진", bike: "Lapierre Aerostorm", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Jasper Stuyven", team: "Trek-Segafredo", primeSeason: 2021, achievement: "클래식 강자의 묵직한 어택과 리드아웃", bike: "Trek Madone SLR", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★☆" },
+          { name: "Fred Wright", team: "Bahrain Victorious", primeSeason: 2022, achievement: "끊임없는 브레이크어웨이 시도, 투르의 전투기", bike: "Merida Reacto", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Victor Campenaerts", team: "Lotto Dstny", primeSeason: 2023, achievement: "펠로톤의 발명가, 초공격적인 브레이크어웨이", bike: "Ridley Noah Fast", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Thomas De Gendt", team: "Lotto-Soudal", primeSeason: 2016, achievement: "몽방투에서의 기적적인 스테이지 우승", bike: "Ridley Helium SL", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Tim Wellens", team: "UAE Team Emirates", primeSeason: 2024, achievement: "포가차르를 이끄는 클래식 펀처 겸 헬퍼", bike: "Colnago V4Rs", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+        
+          // --- 🏔️ 서브 GC, 유망주, 2옵션 클라이머 ---
+          { name: "Enric Mas", team: "Movistar Team", primeSeason: 2020, achievement: "꾸준함의 대명사, 투르 종합 5위", bike: "Canyon Ultimate CFR", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Mikel Landa", team: "Soudal Quick-Step", primeSeason: 2024, achievement: "에베네폴의 산악 헬퍼이자 종합 5위 랭크", bike: "Specialized Tarmac SL8", gc: "★★★★☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Pello Bilbao", team: "Bahrain Victorious", primeSeason: 2023, achievement: "감동의 스테이지 우승 및 종합 6위", bike: "Merida Scultura", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Aleksandr Vlasov", team: "BORA-hansgrohe", primeSeason: 2022, achievement: "러시아의 묵직한 GC, 투르 종합 5위", bike: "Specialized Tarmac SL7", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "David Gaudu", team: "Groupama-FDJ", primeSeason: 2022, achievement: "프랑스의 차세대 희망, 투르 종합 4위", bike: "Lapierre Xelius SL3", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Romain Bardet", team: "AG2R La Mondiale", primeSeason: 2016, achievement: "투르 드 프랑스 종합 2위 포디움 입성", bike: "Focus Izalco Max", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Thibaut Pinot", team: "Groupama-FDJ", primeSeason: 2019, achievement: "투르말레 우승, 낭만적인 클라이머", bike: "Lapierre Xelius SL", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Carlos Rodriguez", team: "INEOS Grenadiers", primeSeason: 2023, achievement: "스테이지 우승 및 투르 종합 5위 달성", bike: "Pinarello Dogma F", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Juan Ayuso", team: "UAE Team Emirates", primeSeason: 2024, achievement: "포가차르 군단의 초강력 영건 클라이머", bike: "Colnago V4Rs", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Ben O'Connor", team: "AG2R Citroen Team", primeSeason: 2021, achievement: "비 쏟아지는 틴느에서의 전설적인 독주 우승", bike: "BMC Teammachine SLR01", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Felix Gall", team: "AG2R Citroen Team", primeSeason: 2023, achievement: "퀸 스테이지 우승, 알프스의 새로운 별", bike: "BMC Teammachine SLR01", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Mattias Skjelmose", team: "Lidl-Trek", primeSeason: 2023, achievement: "스위스 투어 우승자, 영라이더 유망주 GC", bike: "Trek Emonda SLR", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Giulio Ciccone", team: "Lidl-Trek", primeSeason: 2023, achievement: "투르 드 프랑스 산악왕 폴카닷 저지 획득", bike: "Trek Emonda SLR", gc: "★★★☆☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Michael Woods", team: "Israel-Premier Tech", primeSeason: 2023, achievement: "퓌드돔(Puy de Dome) 전설적인 역전 우승", bike: "Factor Ostro VAM", gc: "★★★☆☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Dylan Teuns", team: "Bahrain Victorious", primeSeason: 2019, achievement: "라 플랑슈 데 벨 피유에서의 극적인 스테이지 우승", bike: "Merida Scultura", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+        
+          // --- 🚂 든든한 일꾼들 (도메스티크 추가) ---
+          { name: "Dylan van Baarle", team: "INEOS Grenadiers", primeSeason: 2022, achievement: "산악 구간에서 펠로톤을 부수는 무서운 페이스", bike: "Pinarello Dogma F", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Marc Soler", team: "UAE Team Emirates", primeSeason: 2024, achievement: "포가차르를 위해 몸을 아끼지 않는 행동대장", bike: "Colnago V4Rs", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Nils Politt", team: "UAE Team Emirates", primeSeason: 2024, achievement: "하루종일 펠로톤을 끌어당기는 거대한 톱니바퀴", bike: "Colnago V4Rs", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Marc Hirschi", team: "Team Sunweb", primeSeason: 2020, achievement: "가장 공격적인 선수 수상 및 스테이지 우승", bike: "Cervélo S5", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Jan Tratnik", team: "Visma-Lease a Bike", primeSeason: 2024, achievement: "평지와 언덕을 가리지 않는 전천후 탱크", bike: "Cervélo R5", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Kasper Asgreen", team: "Soudal Quick-Step", primeSeason: 2023, achievement: "브레이크어웨이로 펠로톤을 농락한 스테이지 우승", bike: "Specialized Tarmac SL7", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Yves Lampaert", team: "Quick-Step Alpha Vinyl", primeSeason: 2022, achievement: "코펜하겐 프롤로그 우승, 첫 마이요 존느", bike: "Specialized Shiv TT", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Wilco Kelderman", team: "Jumbo-Visma", primeSeason: 2023, achievement: "빙에고르를 위한 안정적인 산악 페이스메이커", bike: "Cervélo R5", gc: "★★★★☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Ilan Van Wilder", team: "Soudal Quick-Step", primeSeason: 2024, achievement: "에베네폴의 가장 든든한 젊은 산악 파트너", bike: "Specialized Tarmac SL8", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Robert Gesink", team: "Jumbo-Visma", primeSeason: 2020, achievement: "윰보 산악 트레인의 든든한 맏형", bike: "Bianchi Oltre XR4", gc: "★★★☆☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
+          { name: "Steven Kruijswijk", team: "Team Jumbo-Visma", primeSeason: 2019, achievement: "투르 드 프랑스 종합 3위 포디움", bike: "Bianchi Oltre XR4", gc: "★★★★☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "George Bennett", team: "Jumbo-Visma", primeSeason: 2020, achievement: "로글리치를 이끄는 날카로운 산악 헬퍼", bike: "Bianchi Oltre XR4", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Laurens De Plus", team: "INEOS Grenadiers", primeSeason: 2024, achievement: "가장 꾸준한 하이 마운틴 도메스티크", bike: "Pinarello Dogma F", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Pavel Sivakov", team: "UAE Team Emirates", primeSeason: 2024, achievement: "포가차르 군단의 강력한 산악 템포 컨트롤러", bike: "Colnago V4Rs", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Damiano Caruso", team: "Bahrain Victorious", primeSeason: 2021, achievement: "베테랑의 품격, 팀을 구하는 만능 헬퍼", bike: "Merida Scultura", gc: "★★★★☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+        
+          // --- 🚀 스프린터 & 리드아웃 2진 ---
+          { name: "Arnaud Demare", team: "Groupama-FDJ", primeSeason: 2018, achievement: "프랑스 최고의 스프린터, 스테이지 우승", bike: "Lapierre Aircode SL", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Alexander Kristoff", team: "Katusha", primeSeason: 2014, achievement: "괴력의 롱스프린트, 투르 스테이지 2승", bike: "Canyon Aeroad CF", gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Fernando Gaviria", team: "Quick-Step Floors", primeSeason: 2018, achievement: "투르 데뷔전 스테이지 우승 및 옐로 저지", bike: "Specialized Venge ViAS", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Phil Bauhaus", team: "Bahrain Victorious", primeSeason: 2023, achievement: "일관된 탑 5 피니시, 독일 스프린트의 힘", bike: "Merida Reacto", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★☆" },
+          { name: "Jordi Meeus", team: "BORA-hansgrohe", primeSeason: 2023, achievement: "샹젤리제 깜짝 우승의 주인공", bike: "Specialized Tarmac SL7", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★☆" },
+          { name: "Arnaud De Lie", team: "Lotto Dstny", primeSeason: 2024, achievement: "황소 같은 파워, 차세대 벨기에 스프린터", bike: "Orbea Orca Aero", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "John Degenkolb", team: "Team Giant-Alpecin", primeSeason: 2018, achievement: "루베의 영웅, 코블 스테이지 극적인 우승", bike: "Giant Propel Advanced SL", gc: "★☆☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+          { name: "Elia Viviani", team: "Deceuninck-Quick-Step", primeSeason: 2019, achievement: "트랙 황제의 스피드, 투르 스테이지 우승", bike: "Specialized Venge", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Tim Merlier", team: "Alpecin-Fenix", primeSeason: 2021, achievement: "폭발적인 와트, 투르 첫 출전 스테이지 우승", bike: "Canyon Aeroad CFR", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Jonathan Milan", team: "Lidl-Trek", primeSeason: 2024, achievement: "거구에서 뿜어져 나오는 압도적인 최고 속도", bike: "Trek Madone SLR", gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Olav Kooij", team: "Visma-Lease a Bike", primeSeason: 2024, achievement: "비스마의 스프린트 미래, 월드투어 탑티어 진입", bike: "Cervélo S5", gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Sam Bennett", team: "Deceuninck-Quick-Step", primeSeason: 2020, achievement: "샹젤리제 제패 및 그린 저지 획득", bike: "Specialized Tarmac SL7", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Kaden Groves", team: "Alpecin-Deceuninck", primeSeason: 2023, achievement: "오르막도 잘 넘는 다재다능한 스프린터", bike: "Canyon Aeroad CFR", gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Alessandro Petacchi", team: "Fassa Bortolo", primeSeason: 2003, achievement: "알레-젯, 한 해 투르 4승 포함 전성기", bike: "Pinarello Dogma Magnesium", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Robbie McEwen", team: "Lotto-Domo", primeSeason: 2004, achievement: "투르 그린 저지 3회 수상, 본능적인 위치 선정", bike: "Ridley Damocles", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Oscar Freire", team: "Rabobank", primeSeason: 2008, achievement: "그린 저지 획득, 전설적인 타이밍의 스프린터", bike: "Colnago Extreme Power", gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+          { name: "Stuart O'Grady", team: "CSC", primeSeason: 2007, achievement: "그린 저지 경쟁자이자 최고의 캡틴 리드아웃", bike: "Cervélo Soloist Carbon", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★☆" },
+          { name: "Edvald Boasson Hagen", team: "Team Sky", primeSeason: 2011, achievement: "스카이 초기, 스테이지 2승을 거둔 다재다능함", bike: "Pinarello Dogma 60.1", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★☆" },
+          { name: "Sylvain Chavanel", team: "Quick Step", primeSeason: 2010, achievement: "마이요 존느 착용 및 스테이지 2승, 프랑스의 영웅", bike: "Eddy Merckx EMX-5", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Pierre Rolland", team: "Europcar", primeSeason: 2011, achievement: "알프 뒤에즈 우승 및 베스트 영라이더", bike: "Colnago C59", gc: "★★★☆☆", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Rui Costa", team: "Movistar Team", primeSeason: 2013, achievement: "월드 챔피언의 품격, 투르 스테이지 2승", bike: "Pinarello Dogma 65.1", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+        
+          // --- 🔄 추가 GC 및 올라운더 ---
+          { name: "Dan Martin", team: "Garmin-Sharp", primeSeason: 2013, achievement: "가장 공격적인 펀처, 극적인 스테이지 우승", bike: "Cervélo R5", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Rigoberto Uran", team: "Cannondale-Drapac", primeSeason: 2017, achievement: "안정적인 클라이밍으로 투르 종합 2위 달성", bike: "Cannondale SuperSix EVO", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Jakob Fuglsang", team: "Astana", primeSeason: 2019, achievement: "크리테리움 뒤 도피네 우승, 강력한 GC 컨텐더", bike: "Argon 18 Gallium Pro", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Bauke Mollema", team: "Trek-Segafredo", primeSeason: 2017, achievement: "끊임없는 어택, 투르 스테이지 솔로잉 우승", bike: "Trek Emonda SLR", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Domenico Pozzovivo", team: "AG2R La Mondiale", primeSeason: 2015, achievement: "작은 거인, 순수 클라이머의 정석", bike: "Focus Izalco Max", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Samuel Sanchez", team: "Euskaltel-Euskadi", primeSeason: 2011, achievement: "산악왕 폴카닷 저지 및 뤼즈 아르디당 우승", bike: "Orbea Orca", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Luis Leon Sanchez", team: "Rabobank", primeSeason: 2012, achievement: "스테이지 다승자, 영리한 브레이크어웨이", bike: "Giant TCR Advanced SL", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Simon Gerrans", team: "Orica-GreenEDGE", primeSeason: 2013, achievement: "팀 타임트라이얼 우승 및 옐로 저지 착용", bike: "Scott Foil", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Simon Clarke", team: "Israel-Premier Tech", primeSeason: 2022, achievement: "파리-루베 코블 스테이지 기적의 우승", bike: "Factor Ostro VAM", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Heinrich Haussler", team: "Cervélo TestTeam", primeSeason: 2009, achievement: "콜마르 스테이지 빗속의 극적인 독주 우승", bike: "Cervélo S3", gc: "★☆☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          
+          // --- 🔧 과거/현재 리드아웃 & 헬퍼 & 브레이크어웨이 스페셜리스트 ---
+          { name: "Mark Renshaw", team: "HTC-Highroad", primeSeason: 2011, achievement: "카벤디시를 세계 최강으로 만든 최고의 리드아웃", bike: "Specialized Venge", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Bernhard Eisel", team: "Team Sky", primeSeason: 2012, achievement: "스프린터의 보디가드, 펠로톤의 든든한 맏형", bike: "Pinarello Dogma 65.1", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Cian Uijtdebroeks", team: "Visma-Lease a Bike", primeSeason: 2024, achievement: "차세대 GC 유망주, 탑 10 포텐셜", bike: "Cervélo R5", gc: "★★★☆☆", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Lenny Martinez", team: "Groupama-FDJ", primeSeason: 2024, achievement: "깃털처럼 가벼운 체중, 초경량 퓨어 클라이머", bike: "Wilier Filante SLR", gc: "★★★☆☆", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Romain Gregoire", team: "Groupama-FDJ", primeSeason: 2024, achievement: "폭발적인 펀치력, 프랑스의 펀처 유망주", bike: "Wilier Filante SLR", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Kevin Vauquelin", team: "Arkea-B&B Hotels", primeSeason: 2024, achievement: "볼로냐 스테이지 우승, 올라운더의 재발견", bike: "Bianchi Oltre RC", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Tobias Johannessen", team: "Uno-X Mobility", primeSeason: 2024, achievement: "노르웨이의 희망, 공격적인 산악 어택", bike: "Dare VSRu", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Santiago Buitrago", team: "Bahrain Victorious", primeSeason: 2024, achievement: "콜롬비아 특유의 하이 마운틴 클라이밍", bike: "Merida Scultura", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Ben Healy", team: "EF Education-EasyPost", primeSeason: 2024, achievement: "지치지 않는 에어로 브레이크어웨이 스페셜리스트", bike: "Cannondale SystemSix", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Magnus Cort", team: "EF Education-EasyPost", primeSeason: 2022, achievement: "콧수염의 사나이, 전설적인 투르 산악 어택", bike: "Cannondale SuperSix EVO", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Neilson Powless", team: "EF Education-EasyPost", primeSeason: 2023, achievement: "미국인 최초 며칠간 산악왕 저지 착용", bike: "Cannondale SuperSix EVO", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Ben Tulett", team: "Visma-Lease a Bike", primeSeason: 2024, achievement: "강력한 TT 능력을 갖춘 차세대 헬퍼", bike: "Cervélo R5", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Ethan Hayter", team: "INEOS Grenadiers", primeSeason: 2022, achievement: "트랙 출신의 폭발력 있는 스프린트 펀처", bike: "Pinarello Dogma F", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Luke Plapp", team: "Team Jayco AlUla", primeSeason: 2024, achievement: "호주 챔피언, мощный 평지 템포 리딩", bike: "Giant Propel Advanced SL", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Magnus Sheffield", team: "INEOS Grenadiers", primeSeason: 2024, achievement: "미국의 괴물 엔진, 전천후 클래식 라이더", bike: "Pinarello Dogma F", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Joshua Tarling", team: "INEOS Grenadiers", primeSeason: 2024, achievement: "타임트라이얼 유럽 챔피언, 궁극의 평지 엔진", bike: "Pinarello Bolide F", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Thibau Nys", team: "Lidl-Trek", primeSeason: 2024, achievement: "사이클로크로스 유전자, 언덕 스프린트의 최강자", bike: "Trek Madone SLR", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Ethan Vernon", team: "Israel-Premier Tech", primeSeason: 2024, achievement: "트랙 스피드를 장착한 강력한 리드아웃/스프린터", bike: "Factor Ostro VAM", gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Laurence Pithie", team: "Groupama-FDJ", primeSeason: 2024, achievement: "클래식을 지배할 뉴질랜드의 파워 스프린터", bike: "Wilier Filante SLR", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Axel Zingle", team: "Cofidis", primeSeason: 2024, achievement: "어떤 지형에서도 버티는 프랑스 펀처", bike: "Look 795 Blade RS", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Luca Mozzato", team: "Arkea-B&B Hotels", primeSeason: 2024, achievement: "투르 드 플랑드르 2위, 무서운 뒷심", bike: "Bianchi Oltre RC", gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Hugo Page", team: "Intermarche-Wanty", primeSeason: 2024, achievement: "기르마이를 돕는 파워 리드아웃", bike: "Cube Litening AERO C:68X", gc: "★☆☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Laurenz Rex", team: "Intermarche-Wanty", primeSeason: 2024, achievement: "르 사민 우승, 코블스톤 거인", bike: "Cube Litening AERO C:68X", gc: "★☆☆☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Mathias Vacek", team: "Lidl-Trek", primeSeason: 2024, achievement: "체코의 다재다능한 영건, TT와 펀치력 보유", bike: "Trek Madone SLR", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+          { name: "Alec Segaert", team: "Lotto Dstny", primeSeason: 2024, achievement: "차세대 에어로 괴물, 브레이크어웨이 특화", bike: "Orbea Orca Aero", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Nelson Oliveira", team: "Movistar Team", primeSeason: 2020, achievement: "수년간 팀의 평지와 TT를 책임진 베테랑", bike: "Canyon Speedmax CF", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Rui Oliveira", team: "UAE Team Emirates", primeSeason: 2024, achievement: "팀의 평지를 이끄는 쌍둥이 엔진", bike: "Colnago V4Rs", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Stefan Bissegger", team: "EF Education-EasyPost", primeSeason: 2022, achievement: "에어로 포지션의 극치, TT 스페셜리스트", bike: "Cannondale SuperSlice", gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Mikkel Bjerg", team: "UAE Team Emirates", primeSeason: 2023, achievement: "포가차르를 위해 산악 초입을 끄는 강력한 엔진", bike: "Colnago V4Rs", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Remi Cavagna", team: "Deceuninck-Quick-Step", primeSeason: 2021, achievement: "TGV(떼제베), 펠로톤을 부수는 프랑스 특급 열차", bike: "Specialized Tarmac SL7", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Edoardo Affini", team: "Visma-Lease a Bike", primeSeason: 2024, achievement: "이탈리아의 거대한 평지 트랙터", bike: "Cervélo S5", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Nico Denz", team: "BORA-hansgrohe", primeSeason: 2023, achievement: "브레이크어웨이에서 뿜어내는 스프린트 우승", bike: "Specialized Tarmac SL7", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Marco Haller", team: "BORA-hansgrohe", primeSeason: 2024, achievement: "팀을 위해 몸을 날리는 도로 위의 캡틴", bike: "Specialized Tarmac SL8", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "Jonas Koch", team: "BORA-hansgrohe", primeSeason: 2024, achievement: "독일의 묵직한 평지/코블 도메스티크", bike: "Specialized Tarmac SL8", gc: "★☆☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Felix Großschartner", team: "UAE Team Emirates", primeSeason: 2024, achievement: "UAE 산악 트레인의 핵심 톱니바퀴", bike: "Colnago V4Rs", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Omar Fraile", team: "INEOS Grenadiers", primeSeason: 2018, achievement: "맹데 스테이지 우승, 스페인의 사냥꾼", bike: "Pinarello Dogma F10", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          
+          // --- 기타 전설 및 명품 조연들 ---
+          { name: "Sean Kelly", team: "KAS", primeSeason: 1989, achievement: "투르 포인트 저지 4회, 역대 최고의 다재다능", bike: "Vitus 979", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+          { name: "Stephen Roche", team: "Carrera Jeans", primeSeason: 1987, achievement: "지로-투르-월드챔피언십 트리플 크라운 달성", bike: "Battaglin", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Laurent Fignon", team: "Renault-Elf", primeSeason: 1984, achievement: "투르 2연패, 프랑스 사이클링의 지성", bike: "Gitane", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Pedro Delgado", team: "Reynolds", primeSeason: 1988, achievement: "스페인의 국민 영웅, 투르 드 프랑스 제패", bike: "Pinarello", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Bjarne Riis", team: "Team Telekom", primeSeason: 1996, achievement: "인두라인의 시대를 끝낸 덴마크의 황성", bike: "Pinarello", gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Alex Zulle", team: "ONCE", primeSeason: 1999, achievement: "투르 종합 2위 2회, 강력한 타임트라이얼리스트", bike: "Giant TCR", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Tony Rominger", team: "Mapei", primeSeason: 1993, achievement: "투르 산악왕 저지 및 종합 2위, 인두라인의 라이벌", bike: "Colnago", gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Laurent Jalabert", team: "ONCE", primeSeason: 2001, achievement: "스프린터에서 산악왕으로 변신한 자자(Jaja)", bike: "Look 381", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Richard Virenque", team: "Festina", primeSeason: 1997, achievement: "역대 최다(7회) 투르 드 프랑스 산악왕(폴카닷)", bike: "Peugeot", gc: "★★★★☆", domestique: "★☆☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Ivan Basso", team: "CSC", primeSeason: 2005, achievement: "투르 종합 2위, 암스트롱을 위협했던 스마일 어새신", bike: "Cervélo Soloist", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+          { name: "Frank Schleck", team: "Team Saxo Bank", primeSeason: 2011, achievement: "동생 앤디와 함께 나란히 투르 포디움 입성", bike: "Specialized Tarmac SL3", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Andreas Kloden", team: "T-Mobile Team", primeSeason: 2004, achievement: "투르 종합 2위, 얀 울리히의 최고의 파트너", bike: "Giant TCR Advanced", gc: "★★★★☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+          { name: "Alexandre Vinokourov", team: "T-Mobile Team", primeSeason: 2003, achievement: "카자흐스탄의 영웅, 공격적인 투르 종합 3위", bike: "Giant TCR Advanced", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Paolo Bettini", team: "Quick Step", primeSeason: 2006, achievement: "일 릴로(귀뚜라미), 월드챔피언 펀처", bike: "Time VXRS", gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+          { name: "Alejandro Valverde", team: "Movistar Team", primeSeason: 2015, achievement: "발라베르데, 35세에 이룬 감격의 투르 포디움", bike: "Canyon Ultimate CF SLX", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★★★☆" },
+          { name: "Joaquim Rodriguez", team: "Katusha", primeSeason: 2013, achievement: "푸리토, 투르 종합 3위 및 압도적 경사도 펀치", bike: "Canyon Aeroad CF", gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+          { name: "Sam Oomen", team: "Jumbo-Visma", primeSeason: 2020, achievement: "안정적인 산악 지원을 담당하는 네덜란드 헬퍼", bike: "Bianchi Oltre XR4", gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★☆☆☆☆" },
+          { name: "Emanuel Buchmann", team: "BORA-hansgrohe", primeSeason: 2019, achievement: "조용히 투르 종합 4위를 달성한 독일 GC", bike: "Specialized Tarmac SL6", gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Jack Haig", team: "Bahrain Victorious", primeSeason: 2021, achievement: "팀의 핵심 GC 컨텐더 및 든든한 산악 옵션", bike: "Merida Scultura", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Gino Mader", team: "Bahrain Victorious", primeSeason: 2021, achievement: "아름다운 마음씨와 기량, 스테이지 우승자", bike: "Merida Scultura", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+          { name: "Valentin Madouas", team: "Groupama-FDJ", primeSeason: 2022, achievement: "프랑스의 강력한 펀처, 투르 종합 10위권 진입", bike: "Lapierre Xelius SL3", gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+          { name: "David de la Cruz", team: "Team Sky", primeSeason: 2018, achievement: "스페인의 클라이머, 팀 스카이의 핵심 산악 엔진", bike: "Pinarello Dogma F10", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+          { name: "Wawa Barguil", team: "Team Sunweb", primeSeason: 2017, achievement: "프랑스의 요정, 투르 산악왕 획득 및 스테이지 2승", bike: "Giant TCR Advanced SL", gc: "★★★☆☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+          { name: "Lennard Kamna", team: "BORA-hansgrohe", primeSeason: 2020, achievement: "계산된 브레이크어웨이, 전천후 산악 사냥꾼", bike: "Specialized Tarmac SL7", gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★☆☆☆" }
         ];
 
         function draftTeam() {
@@ -353,7 +481,8 @@
             document.getElementById(`${slotPrefix}-name`).innerText = rider.name;
             document.getElementById(`${slotPrefix}-team`).innerText = rider.team;
             document.getElementById(`${slotPrefix}-season`).innerText = `${rider.primeSeason} Season`;
-            
+            // ▼ 이 줄을 새로 추가합니다 ▼
+            document.getElementById(`${slotPrefix}-achieve`).innerText = rider.achievement;
             document.getElementById(`${slotPrefix}-stat-gc`).innerText = rider.gc;
             document.getElementById(`${slotPrefix}-stat-dom`).innerText = rider.domestique;
             document.getElementById(`${slotPrefix}-stat-spr`).innerText = rider.sprint;
