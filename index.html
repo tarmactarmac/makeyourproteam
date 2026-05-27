@@ -224,13 +224,105 @@
         // 여기에 앞서 제공해드린 200명 배열 데이터를 통째로 넣어주시면 됩니다.
         // (현재는 테스트를 위해 일부만 포함되어 있습니다)
         const riders = [
-            { name: "Tadej Pogačar", team: "UAE Team Emirates", primeSeason: 2024, gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★★★★☆" },
-            { name: "Jonas Vingegaard", team: "Jumbo-Visma", primeSeason: 2023, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
-            { name: "Wout van Aert", team: "Jumbo-Visma", primeSeason: 2022, gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★★★" },
-            { name: "Mark Cavendish", team: "Deceuninck-Quick-Step", primeSeason: 2021, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
-            { name: "Sepp Kuss", team: "Jumbo-Visma", primeSeason: 2023, gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
-            { name: "Mathieu van der Poel", team: "Alpecin-Fenix", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★★" }
-            // ... 전체 데이터 추가
+          { name: "Tadej Pogačar", team: "UAE Team Emirates", primeSeason: 2021, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+  { name: "Tadej Pogačar", team: "UAE Team Emirates", primeSeason: 2024, gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★★★★☆" }, // 지로-투르 더블 달성, 압도적 폼
+  { name: "Jonas Vingegaard", team: "Jumbo-Visma", primeSeason: 2022, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+  { name: "Jonas Vingegaard", team: "Jumbo-Visma", primeSeason: 2023, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" }, // 역대급 TT 퍼포먼스
+  
+  { name: "Eddy Merckx", team: "Faema", primeSeason: 1969, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★★" }, // 투르 첫 출전 전관왕
+  { name: "Eddy Merckx", team: "Molteni", primeSeason: 1974, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" },
+  { name: "Bernard Hinault", team: "Renault-Gitane", primeSeason: 1979, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" },
+  { name: "Bernard Hinault", team: "La Vie Claire", primeSeason: 1985, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★☆☆" },
+  { name: "Miguel Indurain", team: "Banesto", primeSeason: 1992, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  { name: "Miguel Indurain", team: "Banesto", primeSeason: 1995, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  
+  { name: "Chris Froome", team: "Sky Procycling", primeSeason: 2013, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+  { name: "Chris Froome", team: "Team Sky", primeSeason: 2015, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+  { name: "Chris Froome", team: "Team Sky", primeSeason: 2017, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" },
+  { name: "Jacques Anquetil", team: "Saint-Raphael", primeSeason: 1964, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+  { name: "Alberto Contador", team: "Discovery Channel", primeSeason: 2007, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  { name: "Alberto Contador", team: "Astana", primeSeason: 2009, gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★★☆☆☆" },
+  
+  // --- 전설적인 GC 및 그랜드 투어 위너 ---
+  { name: "Vincenzo Nibali", team: "Astana", primeSeason: 2014, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+  { name: "Greg LeMond", team: "AD Renting", primeSeason: 1989, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★★★☆" }, // 8초 차이 우승
+  { name: "Marco Pantani", team: "Mercatone Uno", primeSeason: 1998, gc: "★★★★★", domestique: "★☆☆☆☆", sprint: "★☆☆☆☆" },
+  { name: "Jan Ullrich", team: "Team Telekom", primeSeason: 1997, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  { name: "Primoz Roglic", team: "Jumbo-Visma", primeSeason: 2020, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★★☆" },
+  { name: "Remco Evenepoel", team: "Soudal Quick-Step", primeSeason: 2024, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+  { name: "Egan Bernal", team: "Team INEOS", primeSeason: 2019, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★☆☆☆☆" },
+  { name: "Cadel Evans", team: "BMC Racing Team", primeSeason: 2011, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+  { name: "Bradley Wiggins", team: "Team Sky", primeSeason: 2012, gc: "★★★★★", domestique: "★★★☆☆", sprint: "★★☆☆☆" },
+  { name: "Geraint Thomas", team: "Team Sky", primeSeason: 2018, gc: "★★★★★", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+  { name: "Nairo Quintana", team: "Movistar Team", primeSeason: 2013, gc: "★★★★☆", domestique: "★☆☆☆☆", sprint: "★☆☆☆☆" },
+  
+  // --- 스프린트 제왕들 (팀/연도별 폼 변화) ---
+  { name: "Mark Cavendish", team: "Team Columbia-HTC", primeSeason: 2009, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 6개 스테이지 우승
+  { name: "Mark Cavendish", team: "HTC-Highroad", primeSeason: 2011, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 그린 저지
+  { name: "Mark Cavendish", team: "Deceuninck-Quick-Step", primeSeason: 2021, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 화려한 부활, 4승 추가
+  { name: "Mark Cavendish", team: "Astana Qazaqstan", primeSeason: 2024, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★☆" }, // 35승 대기록 달성
+  { name: "Peter Sagan", team: "Liquigas-Cannondale", primeSeason: 2012, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+  { name: "Peter Sagan", team: "Tinkoff", primeSeason: 2016, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+  { name: "Peter Sagan", team: "Bora-Hansgrohe", primeSeason: 2018, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+  { name: "Erik Zabel", team: "Team Telekom", primeSeason: 1997, gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+  { name: "Erik Zabel", team: "Team Telekom", primeSeason: 2001, gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" },
+  { name: "Mario Cipollini", team: "Saeco", primeSeason: 1999, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Marcel Kittel", team: "Team Giant-Shimano", primeSeason: 2014, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Marcel Kittel", team: "Quick-Step Floors", primeSeason: 2017, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" }, // 5개 스테이지 우승
+  
+  // --- 강력한 최신형 괴물들 ---
+  { name: "Wout van Aert", team: "Jumbo-Visma", primeSeason: 2020, gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★★☆" },
+  { name: "Wout van Aert", team: "Jumbo-Visma", primeSeason: 2022, gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★★★" }, // 궁극의 그린저지 & 슈퍼 도메스티크
+  { name: "Mathieu van der Poel", team: "Alpecin-Fenix", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★★" }, // 첫 출전 옐로저지
+  { name: "Jasper Philipsen", team: "Alpecin-Deceuninck", primeSeason: 2023, gc: "★☆☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" }, // 4승 및 그린저지
+  { name: "Mads Pedersen", team: "Trek-Segafredo", primeSeason: 2022, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+  { name: "Biniam Girmay", team: "Intermarche-Wanty", primeSeason: 2024, gc: "★★☆☆☆", domestique: "★★☆☆☆", sprint: "★★★★★" }, // 아프리카 최초 그린저지
+  
+  // --- 슈퍼 도메스티크 & 언성 히어로들 ---
+  { name: "Sepp Kuss", team: "Jumbo-Visma", primeSeason: 2020, gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 로글리치의 핵심 산악 엔진
+  { name: "Sepp Kuss", team: "Jumbo-Visma", primeSeason: 2023, gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 빙에고르 우승의 일등공신
+  { name: "Michal Kwiatkowski", team: "Team Sky", primeSeason: 2017, gc: "★★★☆☆", domestique: "★★★★★", sprint: "★★★☆☆" }, // 프룸을 위한 만능 헬퍼
+  { name: "Michal Kwiatkowski", team: "INEOS Grenadiers", primeSeason: 2020, gc: "★★★☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+  { name: "Jonathan Castroviejo", team: "Team Sky", primeSeason: 2018, gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★☆☆☆☆" },
+  { name: "Jens Voigt", team: "Team CSC", primeSeason: 2006, gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★★☆☆☆" }, // 브레이크어웨이와 희생의 아이콘
+  { name: "Michael Morkov", team: "Deceuninck-Quick-Step", primeSeason: 2021, gc: "★☆☆☆☆", domestique: "★★★★★", sprint: "★★★☆☆" }, // 카벤디시 부활을 이끈 역대급 리드아웃
+  { name: "Tim Declercq", team: "Deceuninck-Quick-Step", primeSeason: 2020, gc: "★☆☆☆☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 펠로톤의 트랙터
+  { name: "Tony Martin", team: "Jumbo-Visma", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★★", sprint: "★★☆☆☆" }, // 펠로톤 지휘관
+  
+  // --- 스테이지 헌터 및 펀쳐 ---
+  { name: "Julian Alaphilippe", team: "Deceuninck-Quick-Step", primeSeason: 2019, gc: "★★★★☆", domestique: "★★★☆☆", sprint: "★★★★☆" }, // 프랑스의 희망, 14일간 마이요 존느
+  { name: "Tom Pidcock", team: "INEOS Grenadiers", primeSeason: 2022, gc: "★★★☆☆", domestique: "★★★☆☆", sprint: "★★★☆☆" }, // 알프 뒤에즈 스테이지 우승
+  { name: "Matej Mohoric", team: "Bahrain Victorious", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" },
+  { name: "Thomas Voeckler", team: "Europcar", primeSeason: 2011, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" }, // 기적의 방어전
+  
+  // --- 강력한 2옵션 및 팀 플레이어 ---
+  { name: "Richie Porte", team: "Team Sky", primeSeason: 2015, gc: "★★★★☆", domestique: "★★★★★", sprint: "★☆☆☆☆" }, // 프룸의 최고 산악 파트너
+  { name: "Richie Porte", team: "Trek-Segafredo", primeSeason: 2020, gc: "★★★★★", domestique: "★★☆☆☆", sprint: "★☆☆☆☆" }, // 본인 종합 3위 포디움 달성
+  { name: "Matteo Jorgenson", team: "Visma-Lease a Bike", primeSeason: 2024, gc: "★★★★☆", domestique: "★★★★★", sprint: "★★☆☆☆" },
+  { name: "Adam Yates", team: "UAE Team Emirates", primeSeason: 2023, gc: "★★★★★", domestique: "★★★★☆", sprint: "★★★☆☆" }, // 포가차르 헬퍼 겸 종합 3위
+  { name: "Joao Almeida", team: "UAE Team Emirates", primeSeason: 2024, gc: "★★★★☆", domestique: "★★★★☆", sprint: "★★☆☆☆" },
+  
+  // --- 과거 명스프린터들 ---
+  { name: "Andre Greipel", team: "Lotto-Belisol", primeSeason: 2012, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Andre Greipel", team: "Lotto-Soudal", primeSeason: 2015, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Alessandro Petacchi", team: "Fassa Bortolo", primeSeason: 2003, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Robbie McEwen", team: "Lotto-Domo", primeSeason: 2004, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Thor Hushovd", team: "Credit Agricole", primeSeason: 2005, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★★" },
+  
+  // --- 근래 주요 선수들 (계속 추가 가능) ---
+  { name: "Richard Carapaz", team: "EF Education-EasyPost", primeSeason: 2024, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" }, // 산악왕 (폴카닷 저지)
+  { name: "Jai Hindley", team: "BORA-hansgrohe", primeSeason: 2023, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  { name: "Simon Yates", team: "Team Jayco AlUla", primeSeason: 2023, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★★☆☆" },
+  { name: "David Gaudu", team: "Groupama-FDJ", primeSeason: 2022, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  { name: "Romain Bardet", team: "AG2R La Mondiale", primeSeason: 2016, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  { name: "Thibaut Pinot", team: "Groupama-FDJ", primeSeason: 2019, gc: "★★★★☆", domestique: "★★☆☆☆", sprint: "★★☆☆☆" },
+  { name: "Dylan Groenewegen", team: "Team Jumbo-Visma", primeSeason: 2019, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Fabio Jakobsen", team: "Quick-Step Alpha Vinyl", primeSeason: 2022, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Caleb Ewan", team: "Lotto Soudal", primeSeason: 2019, gc: "★☆☆☆☆", domestique: "★☆☆☆☆", sprint: "★★★★★" },
+  { name: "Michael Matthews", team: "Team Sunweb", primeSeason: 2017, gc: "★★☆☆☆", domestique: "★★★☆☆", sprint: "★★★★☆" }, // 그린 저지 획득
+  { name: "Christophe Laporte", team: "Jumbo-Visma", primeSeason: 2022, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★★☆" }, // 슈퍼 리드아웃 & 스테이지 우승
+  { name: "Stefan Kung", team: "Groupama-FDJ", primeSeason: 2021, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★☆☆☆" }, // 강력한 TT 특화 룰러
+  { name: "Filippo Ganna", team: "INEOS Grenadiers", primeSeason: 2022, gc: "★★☆☆☆", domestique: "★★★★☆", sprint: "★★★☆☆" }
         ];
 
         function draftTeam() {
