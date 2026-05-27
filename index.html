@@ -214,6 +214,22 @@
             font-weight: 900;
             text-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
         }
+        .team-tier-stars {
+            color: #facc15;
+            font-size: 1.8rem;
+            margin-top: 15px;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+        }
+
+        /* 추가: 팀 평가 영문 텍스트 디자인 */
+        .team-tier-text {
+            color: #38bdf8; /* 스카이블루 색상으로 포인트 */
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
@@ -262,6 +278,9 @@
     <div class="power-container hidden" id="power-board">
         <div class="power-label">TEAM POWER VALUE</div>
         <div class="power-score" id="total-power">0</div>
+        <!-- ▼ 새로 추가된 두 줄 ▼ -->
+        <div class="team-tier-stars" id="tier-stars"></div>
+        <div class="team-tier-text" id="tier-text"></div>
     </div>
     <script>
         // 여기에 앞서 제공해드린 200명 배열 데이터를 통째로 넣어주시면 됩니다.
@@ -517,8 +536,34 @@
                 });
 
                 // 카드 3장이 다 나오고 난 직후(0.9초 뒤) 점수판 짠! 하고 등장
-                setTimeout(() => {
+               setTimeout(() => {
+                    let stars = "";
+                    let evalText = "";
+
+                    // 점수 구간별 등급 판별
+                    if (totalPower >= 60) {
+                        stars = "★★★★★";
+                        evalText = "DREAM TEAM";
+                    } else if (totalPower >= 55) {
+                        stars = "★★★★☆";
+                        evalText = "WORLD CLASS";
+                    } else if (totalPower >= 50) {
+                        stars = "★★★☆☆";
+                        evalText = "PRO STANDARD";
+                    } else if (totalPower >= 40) {
+                        stars = "★★☆☆☆";
+                        evalText = "UNDERDOG";
+                    } else {
+                        stars = "★☆☆☆☆";
+                        evalText = "DISASTER";
+                    }
+
+                    // 화면에 데이터 꽂아주기
                     document.getElementById('total-power').innerText = totalPower;
+                    document.getElementById('tier-stars').innerText = stars;
+                    document.getElementById('tier-text').innerText = evalText;
+                    
+                    // 점수판 나타나게 하기
                     powerBoard.classList.remove('hidden');
                 }, 900);
 
