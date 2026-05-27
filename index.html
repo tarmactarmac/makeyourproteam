@@ -230,6 +230,13 @@
             margin-top: 5px;
             letter-spacing: 2px;
         }
+        .bike-text {
+            font-size: 0.85rem;
+            color: #a1a1aa;
+            margin-bottom: 15px;
+            font-style: italic;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -241,6 +248,7 @@
             <div class="season-badge" id="gc-season"></div>
             <h2 class="rider-name" id="gc-name"></h2>
             <div class="achievement-text" id="gc-achieve"></div>
+            <div class="bike-text" id="gc-bike"></div> <!-- 👈 이 줄 추가! -->
             <div class="team-name" id="gc-team"></div>
             <div class="stats">
                 <div class="stat-row"><span class="stat-label">GC</span><span class="stat-value" id="gc-stat-gc"></span></div>
@@ -254,6 +262,7 @@
             <div class="season-badge" id="dom-season"></div>
             <h2 class="rider-name" id="dom-name"></h2>        
             <div class="achievement-text" id="dom-achieve"></div>
+            <div class="bike-text" id="dom-bike"></div> <!-- 👈 이 줄 추가! -->
             <div class="team-name" id="dom-team"></div>
             <div class="stats">
                 <div class="stat-row"><span class="stat-label">GC</span><span class="stat-value" id="dom-stat-gc"></span></div>
@@ -267,6 +276,7 @@
             <div class="season-badge" id="spr-season"></div>
             <h2 class="rider-name" id="spr-name"></h2>
             <div class="achievement-text" id="spr-achieve"></div>
+            <div class="bike-text" id="spr-bike"></div> <!-- 👈 이 줄 추가! -->
             <div class="team-name" id="spr-team"></div>
             <div class="stats">
                 <div class="stat-row"><span class="stat-label">GC</span><span class="stat-value" id="spr-stat-gc"></span></div>
@@ -569,13 +579,16 @@
 
             }, 400);
         }
-
         function updateCard(slotPrefix, rider) {
             document.getElementById(`${slotPrefix}-name`).innerText = rider.name;
             document.getElementById(`${slotPrefix}-team`).innerText = rider.team;
             document.getElementById(`${slotPrefix}-season`).innerText = `${rider.primeSeason} Season`;
-            // ▼ 이 줄을 새로 추가합니다 ▼
+            
             document.getElementById(`${slotPrefix}-achieve`).innerText = rider.achievement;
+            
+            // ▼ 이 줄을 새로 추가합니다 ▼
+            document.getElementById(`${slotPrefix}-bike`).innerText = `🚲 ${rider.bike}`;
+            
             document.getElementById(`${slotPrefix}-stat-gc`).innerText = rider.gc;
             document.getElementById(`${slotPrefix}-stat-dom`).innerText = rider.domestique;
             document.getElementById(`${slotPrefix}-stat-spr`).innerText = rider.sprint;
